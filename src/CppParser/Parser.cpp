@@ -3590,13 +3590,13 @@ AST::ExpressionObsolete* Parser::WalkExpressionObsolete(const clang::Expr* Expr)
     default:
         break;
     }
-    clang::Expr::EvalResult integer;
+	llvm::APSInt integer;
     if (Expr->getStmtClass() != clang::Stmt::CharacterLiteralClass &&
         Expr->getStmtClass() != clang::Stmt::CXXBoolLiteralExprClass &&
         Expr->getStmtClass() != clang::Stmt::UnaryExprOrTypeTraitExprClass &&
         !Expr->isValueDependent() &&
         Expr->EvaluateAsInt(integer, c->getASTContext()))
-        return new AST::ExpressionObsolete(integer.Val.getInt().toString(10));
+        return new AST::ExpressionObsolete(integer.toString(10));
     return new AST::ExpressionObsolete(GetStringFromStatement(Expr));
 }
 

@@ -2057,8 +2057,9 @@ namespace CppSharp.Generators.CSharp
             }
 
             var dtor = @class.Destructors.FirstOrDefault();
-            if (dtor != null && dtor.Access != AccessSpecifier.Private &&
-                @class.HasNonTrivialDestructor && !@class.IsAbstract)
+            var disposable = @class.PreprocessedEntities.OfType<MacroExpansion>().Where(s => s.Text == "CS_DISPOSABLE").FirstOrDefault() != null;
+            if (disposable ||  (dtor != null && dtor.Access != AccessSpecifier.Private && 
+                @class.HasNonTrivialDestructor && !@class.IsAbstract) )
             {
                 NativeLibrary library;
                 if (!Options.CheckSymbols ||
